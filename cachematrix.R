@@ -1,28 +1,60 @@
 
 
-#Assignment 2
+#Assignment 2 for Lexical Scoping
 makeCacheMatrix <- function(x = matrix()) {
-  a1<-NULL
+  check_inverse<-NULL
   set<-function(y){
     x<<-y
-    a1<<-NULL
+    check_inverse<<-NULL
   }
   get<-function() x
-  setmtx<-function(solve) a1<<- solve
-  getmtx<-function() a1
+  set_inverse<-function(solve) check_inverse<<- solve
+  get_inverse<-function() check_inverse
   list(set=set, get=get,
-       setmtx=setmtx,
-       getmtx=getmtx)
+       set_inverse=set_inverse,
+       get_inverse=get_inverse)
 }
 
 cacheSolve <- function(x=matrix(), ...) {
-  a1<-x$getmtx()
-  if(!is.null(a1)){
-    message("get cache")
-    return(a1)
+  check_inverse<-x$get_inverse()
+  if(!is.null(check_inverse)){
+    message("geting cache data")
+    return(check_inverse)
   }
-  matrix<-x$get()
-  a1<-solve(matrix, ...)
-  x$setmtx(a1)
-  a1
+  my_matrix<-x$get()
+  check_inverse<-solve(my_matrix, ...)
+  x$set_inverse(check_inverse)
+  check_inverse
 }
+#Take an example of Invertible matrix
+#Invertible matrix -If the square matrix has invertible matrix or non-singular if 
+#and only if its determinant value is non-zero. Moreover, if the square matrix A is 
+#not invertible or singular if and only if its determinant is zero. 
+#Obtain the determinant of the given matrix. Since det(A) is not equal to zero,A is invertible.
+#Testing 
+###> source('C:/work/Training/datasciencecoursera_git/datasciencecoursera/ProgrammingAssignment2/cachematrix.R')
+###> test_matrix<-matrix(c(1,2,3,0,1,5,5,6,0),3,3)
+###> m1<-makeCacheMatrix(test_matrix)
+###> m1$get()
+###     [,1] [,2] [,3]
+###[1,]    1    0    5
+###[2,]    2    1    6
+###[3,]    3    5    0
+###> m1$get_inverse()
+###NULL
+###> cacheSolve(m1)
+###     [,1] [,2] [,3]
+###[1,] -6.0    5 -1.0
+###[2,]  3.6   -3  0.8
+###[3,]  1.4   -1  0.2
+###> cacheSolve(m1)
+###geting cache data
+###     [,1] [,2] [,3]
+###[1,] -6.0    5 -1.0
+###[2,]  3.6   -3  0.8
+###[3,]  1.4   -1  0.2
+###> m1$get_inverse()
+###     [,1] [,2] [,3]
+###[1,] -6.0    5 -1.0
+###[2,]  3.6   -3  0.8
+###[3,]  1.4   -1  0.2
